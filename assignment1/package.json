@@ -1,0 +1,27 @@
+{
+  "name": "assignment1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register test/**/*.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/debug": "0.0.29",
+    "@types/express": "^4.0.35",
+    "@types/node": "^7.0.12",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
+    "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "debug": "^2.6.3",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.9.4"
+  }
+}
