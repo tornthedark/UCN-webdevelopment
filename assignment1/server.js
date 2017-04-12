@@ -4,9 +4,9 @@ var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 
-var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var config = require('./config'); // get our config file
-var User = require('./app/models/user'); // get our mongoose model
+var jwt = require('jsonwebtoken'); 
+var config = require('./config');
+var User = require('./app/models/user');
 
 // =======================
 // configuration =========
@@ -21,16 +21,10 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 
-// =======================
-// routes ================
-// =======================
-// basic route
+// root endpoint
 app.get('/', function (req, res) {
     res.send('Hello! The API is at http://localhost:' + port + '/api');
 });
-
-// API ROUTES -------------------
-// we'll get to these in a second
 
 app.get('/setup', function (req, res) {
 
@@ -59,18 +53,17 @@ apiRoutes.post('/authenticate', function (req, res) {
         name: req.body.name
     }, function (err, user) {
 
-        if (err) throw err;
+        if (err)
+            throw err;
 
         if (!user) {
             res.json({ success: false, message: 'Authentication failed. User not found.' });
         } else if (user) {
-
-            // check if password matches
+            
             if (user.password != req.body.password) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {
-                // if user is found and password is right
-                // create a token
+                
                 var token = jwt.sign(user, app.get('superSecret'), {
                     expiresIn: 1440 // expires in 24 hours
                 });
@@ -88,18 +81,15 @@ apiRoutes.post('/authenticate', function (req, res) {
 
 // route middleware to verify a token
 apiRoutes.use(function (req, res, next) {
-
-    // check header or url parameters or post parameters for token
+    
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
     // decode token
-    if (token) {
-        // verifies secret and checks exp
+    if (token) {        
         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
             if (err) {
                 return res.json({ success: false, message: 'Failed to authenticate token.' });
-            } else {
-                // if everything is good, save to request for use in other routes
+            } else {                
                 req.decoded = decoded;
                 next();
             }
@@ -117,7 +107,7 @@ apiRoutes.use(function (req, res, next) {
 
 // route to show a random message (GET http://localhost:8080/api/)
 apiRoutes.get('/', function (req, res) {
-    res.json({ message: 'Welcome to the coolest API on earth!' });
+    res.json({ message: 'Welcome!' });
 });
 
 // route to return all users (GET http://localhost:8080/api/users)
